@@ -1,0 +1,47 @@
+{% load static %}
+<li id="artist{{ artist_id }}_header">
+	<form id="artistForm{{ artist_id }}" method="POST" action="{% url remove_artist artist_id %}">
+		{% csrf_token %}
+		
+		<strong>Tem certeza?</strong>
+		<input type="image" id="removeArtist{{ artist_id }}" src="{% static 'images/confirm.png' %}" />
+		<a href="#" name="cancel" id="cancel{{ artist_id }}"><img src="{% static 'images/delete.png' %}" /></a>
+	</form>
+
+	<script type="text/javascript">
+		$('#artistForm{{ artist_id }}').submit(event, function(){
+			event.preventDefault(); 
+			var url = $(this).attr('action');
+	    	var data = $(this).serializeArray();
+
+	    	console.log(data);
+			/* Send the data using post and put the results in a div */
+			$.post(url, 
+				   data, 
+				   function(data){
+				   		if ("{{ artist_id }}" == 0){
+							$("#artist{{ artist_id }}_header").remove();
+							$("#artistList").prepend(data);
+						}
+						else{
+							$("#artist{{ artist_id }}_header").html(data);
+						}
+
+			});
+		});
+
+		$('#cancel{{ artist_id}}').click(function(){
+			var url = $('#artistForm{{ artist_id }}').attr('action');
+	    	var data = $('#artistForm{{ artist_id }}').serializeArray();
+	    	console.log(data);
+			/* Send the data using post and put the results in a div */
+			$.post(url, 
+				   data, 
+				   function(data){
+						$("#artist{{ artist_id }}_header").html(data);
+					}
+			);
+		});
+		
+	</script>
+</li>

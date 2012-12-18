@@ -1,0 +1,11 @@
+
+<ul>
+	{% for album in albuns %}
+		<li>
+			<a class="album" href="#" id="{{ album.id }}" name="{% url list_songs album.id %}">
+				{{ album.year }} - <strong>{{ album.name }}</strong>
+			</a>
+		</li>
+	{% endfor %}
+	<a href="#">Adicionar album</a>
+</ul>

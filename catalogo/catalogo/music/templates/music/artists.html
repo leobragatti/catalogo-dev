@@ -1,0 +1,110 @@
+{% load static %}
+<div align="right">
+	<a href="#" id="addArtist">Add</a>
+	<ul id="artistAdd_list"></ul>
+</div>
+<ul id="artistList">
+	{% if artists %}
+			{% for artist in artists %}
+				<li id="artist{{ artist.id }}_header">
+					<h2>
+						<a class="artist" href="#" id="artist{{ artist.id }}" name="{% url list_albuns artist.id %}">{{ artist.name }}</a>	
+						<a class="artist-edit" id="{{ artist.id }}" name="{% url save_artist artist.id %}" href="#"><img src="{% static 'images/edit.png' %}"</img></a>
+						<a class="artist-remove" id="{{ artist.id }}" name="{% url remove_artist artist.id %}" href="#"><img src="{% static 'images/delete.png' %}"</img></a>
+					</h2>
+					<ul id="artist{{ artist.id }}_list"></ul>
+				</li>
+			{% endfor %}
+		
+	{% else %}
+		<h1>Nenhum artista cadastrado</h1>
+	{% endif %}
+</ul>
+
+<script type="text/javascript">
+	$("#nav #artistList").on("click", "a.artist", function(){
+		var link = this.name;
+		var id = "#" + this.id;
+		$.ajax({
+			url: link,
+			cache: false,
+			beforeSend: function(){
+				$(id + "_list").html("<strong>Buscando albuns...</strong>");
+			},
+			success: function(data){
+				$(id + "_list").html(data);
+			}
+		});
+		$("#information").data("info", {name: $(this).html()});
+		$("#information").html($(this).html());
+		$(id + "_list").hide();
+		$(id + "_list").fadeIn('slow');
+		return false;
+	});
+
+	$("#nav #artistList").on("click", "a.artist-edit", function(){
+		var link = this.name;
+		var id = "#artist" + this.id;
+		$.ajax({
+			url: link,
+			cache: false,
+			beforeSend: function(){
+				$(id + "_header").html("<strong>Carregando</strong>");
+			},
+			success: function(data){
+				$(id + "_header").html(data);
+			}
+		});
+		return false;
+	});
+
+	$("#nav #artistList").on("click", "a.album", function(){
+		var link = this.name;
+		$.ajax({
+			url: link,
+			cache: false,
+			beforeSend: function(){
+				$("#post").html("<strong>Buscando músicas...</strong>");
+			},
+			success: function(data){
+				$("#post").html(data);
+			}
+		});
+		console.log($('#information').data("info"));
+
+		$("#information").html($('#information').data("info").name + ' > ' + $(this).html());
+		$("#post").hide();
+		$("#post").fadeIn('slow');
+	});
+
+	$("#nav #artistList").on("click", "a.artist-remove", function(){
+		var link = this.name;
+		var id = "#artist" + this.id;
+		
+		$.ajax({
+			url: link,
+			cache: false,
+			beforeSend: function(){
+				$(id + "_header").html("<strong>Carregando</strong>");
+			},
+			success: function(data){
+				$(id + "_header").html(data);
+			}
+		});
+
+		return false;
+	});
+
+	$("#addArtist").click(function(){
+		$.ajax({
+			url: "{% url save_artist 0 %}",
+			cache: false,
+			success: function(data){
+				$("#artistAdd_list").html(data);
+			}
+		});
+		$("#artistAdd_list").hide();
+		$("#artistAdd_list").fadeIn('slow');
+		return false;
+	});
+</script>
