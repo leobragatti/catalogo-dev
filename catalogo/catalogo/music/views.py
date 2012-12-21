@@ -64,9 +64,13 @@ def save_artist(request, artist_id):
 		return render(request, 'music/editar_artist.html', vars_template)
 
 def remove_artist(request, artist_id):
+	#import pdb; pdb.set_trace()
 	try:
 		a = Artist.objects.get(pk=artist_id)
 	except Artist.DoesNotExist as e:
 		a = Artist()
-		
-	return render(request, 'music/remove_artist.html', {'artist_id': artist_id})
+	if request.method == 'POST':
+		a.delete()
+		return HttpResponse("Artista removido")
+	else:
+		return render(request, 'music/remove_artist.html', {'artist_id': artist_id})

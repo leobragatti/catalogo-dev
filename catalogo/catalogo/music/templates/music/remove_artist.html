@@ -1,5 +1,5 @@
 {% load static %}
-<li id="artist{{ artist_id }}_header">
+<li id="artist{{ artist_id }}_header_remove">
 	<form id="artistForm{{ artist_id }}" method="POST" action="{% url remove_artist artist_id %}">
 		{% csrf_token %}
 		
@@ -14,8 +14,8 @@
 			var url = $(this).attr('action');
 	    	var data = $(this).serializeArray();
 
-	    	console.log(data);
 			/* Send the data using post and put the results in a div */
+			console.log(data);
 			$.post(url, 
 				   data, 
 				   function(data){
@@ -28,19 +28,13 @@
 						}
 
 			});
+			$("#artist{{ artist_id }}_header").show();
+			$("#artist{{ artist_id }}_header_remove").remove();
 		});
 
 		$('#cancel{{ artist_id}}').click(function(){
-			var url = $('#artistForm{{ artist_id }}').attr('action');
-	    	var data = $('#artistForm{{ artist_id }}').serializeArray();
-	    	console.log(data);
-			/* Send the data using post and put the results in a div */
-			$.post(url, 
-				   data, 
-				   function(data){
-						$("#artist{{ artist_id }}_header").html(data);
-					}
-			);
+			$("#artist{{ artist_id }}_header").show();
+			$("#artist{{ artist_id }}_header_remove").remove();
 		});
 		
 	</script>

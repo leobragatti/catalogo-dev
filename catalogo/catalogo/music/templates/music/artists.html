@@ -84,11 +84,10 @@
 		$.ajax({
 			url: link,
 			cache: false,
-			beforeSend: function(){
-				$(id + "_header").html("<strong>Carregando</strong>");
-			},
 			success: function(data){
-				$(id + "_header").html(data);
+				//$(id + "_header").html(data);
+				$(id + "_header").hide();
+				$(data).insertAfter($(id + "_header"))
 			}
 		});
 
